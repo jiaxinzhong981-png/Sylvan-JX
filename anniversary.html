@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+
+<html lang="zh">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Sylvan·JX</title>
+
+    <style>
+
+        * {
+
+            box-sizing: border-box;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+        body {
+
+            font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Serif SC', serif;
+
+            background: #fce8f1;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: flex-start;
+
+        }
+
+        #root {
+
+            width: 100%;
+
+            max-width: 480px;
+
+            margin: 0 auto;
+
+            position: relative;
+
+        }
+
+        .app-root {
+
+            min-height: 100vh;
+
+            background: linear-gradient(160deg, #fffbfd 0%, #fce8f1 55%, #f8d4e8 100%);
+
+            font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Serif SC', serif;
+
+            color: #3d1f10;
+
+            padding-bottom: 68px;
+
+            user-select: none;
+
+            width: 100%;
+
+        }
+
+        .card {
+
+            background: rgba(255,255,255,0.55);
+
+            backdrop-filter: blur(18px);
+
+            -webkit-backdrop-filter: blur(18px);
+
+            border-radius: 22px;
+
+            padding: 16px 18px;
+
+            margin: 10px 14px;
+
+            box-shadow: 0 4px 20px rgba(210,110,160,0.10), 0 1px 4px rgba(210,110,160,0.08);
+
+            border: 1px solid rgba(255,255,255,0.7);
+
+        }
+
+        .section-title {
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            color: #c05878;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 12px;
+
+        }
+
+        .input {
+
+            width: 100%;
+
+            padding: 9px 13px;
+
+            border-radius: 14px;
+
+            border: 1px solid rgba(220,140,175,0.28);
+
+            background: rgba(255,255,255,0.65);
+
+            font-size: 14px;
+
+            color: #3b2030;
+
+            outline: none;
+
+            box-sizing: border-box;
+
+            font-family: inherit;
+
+        }
+
+        .textarea {
+
+            width: 100%;
+
+            min-height: 90px;
+
+            padding: 9px 13px;
+
+            border-radius: 14px;
+
+            border: 1px solid rgba(220,140,175,0.28);
+
+            background: rgba(255,255,255,0.65);
+
+            font-size: 14px;
+
+            color: #3b2030;
+
+            outline: none;
+
+            box-sizing: border-box;
+
+            resize: none;
+
+            font-family: inherit;
+
+            line-height: 1.65;
+
+        }
+
+        .btn {
+
+            padding: 9px 20px;
+
+            border-radius: 20px;
+
+            border: none;
+
+            background: linear-gradient(135deg, #f48fb1 0%, #c86090 100%);
+
+            color: #fff;
+
+            font-size: 13px;
+
+            font-weight: 500;
+
+            cursor: pointer;
+
+            box-shadow: 0 2px 10px rgba(200,90,140,0.25);
+
+            transition: opacity .15s;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+        .btn-inactive {
+
+            background: rgba(220,150,180,0.18);
+
+            color: #c05878;
+
+            box-shadow: none;
+
+        }
+
+        .tab-bar {
+
+            position: fixed;
+
+            bottom: 0;
+
+            left: 0;
+
+            right: 0;
+
+            display: flex;
+
+            background: rgba(255,255,255,0.82);
+
+            backdrop-filter: blur(16px);
+
+            -webkit-backdrop-filter: blur(16px);
+
+            border-top: 1px solid rgba(240,175,210,0.3);
+
+            z-index: 200;
+
+            max-width: 480px;
+
+            margin: 0 auto;
+
+        }
+
+        .tab-btn {
+
+            flex: 1;
+
+            padding: 13px 0 10px;
+
+            background: none;
+
+            border: none;
+
+            font-size: 12px;
+
+            color: #b89aaa;
+
+            font-weight: 400;
+
+            cursor: pointer;
+
+            transition: color .15s;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            gap: 2px;
+
+            font-family: inherit;
+
+        }
+
+        .tab-btn.active {
+
+            color: #c05878;
+
+            font-weight: 600;
+
+        }
+
+        .tab-btn svg {
+
+            width: 24px;
+
+            height: 24px;
+
+            display: block;
+
+        }
+
+        .tab-btn svg path,
+
+        .tab-btn svg line {
+
+            stroke: currentColor;
+
+        }
+
+        .flex-between { display: flex; align-items: center; justify-content: space-between; }
+
+        .mt-10 { margin-top: 10px; }
+
+        .w-full { width: 100%; }
+
+        .photo-grid {
+
+            display: flex;
+
+            gap: 10px;
+
+            margin: 0 14px;
+
+        }
+
+        .photo-box {
+
+            flex: 1;
+
+            aspect-ratio: 1;
+
+            border-radius: 18px;
+
+            overflow: hidden;
+
+            background: rgba(255,255,255,0.45);
+
+            border: 1.5px dashed rgba(220,145,180,0.4);
+
+            cursor: pointer;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            backdrop-filter: blur(8px);
+
+            box-shadow: 0 2px 12px rgba(210,110,160,0.07);
+
+            position: relative;
+
+        }
+
+        .photo-box img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+        }
+
+        .photo-box span {
+
+            color: #d4a8c0;
+
+            font-size: 30px;
+
+            line-height: 1;
+
+        }
+
+        .memo-item { padding: 12px 16px; }
+
+        .memo-text { font-size: 14px; line-height: 1.5; }
+
+        .memo-date { font-size: 11px; color: #b09098; margin-top: 2px; }
+
+        .del-btn {
+
+            background: none;
+
+            border: none;
+
+            color: #d8aac0;
+
+            font-size: 20px;
+
+            cursor: pointer;
+
+            padding: 0 2px;
+
+            line-height: 1;
+
+        }
+
+        .diary-entry { margin-top: 8px; }
+
+        .diary-entry .date { font-size: 11px; color: #b09098; margin-bottom: 8px; }
+
+        .diary-entry .content { font-size: 13px; line-height: 1.75; white-space: pre-wrap; }
+        .content { font-size: 13px; line-height: 1.8; white-space: pre-wrap; color: #3d1f10; }
+
+        .comment-area {
+
+            margin-top: 12px;
+
+            border-top: 1px solid rgba(220,150,180,0.18);
+
+            padding-top: 10px;
+
+        }
+
+        .comment-item {
+
+            font-size: 12px;
+
+            color: #a07888;
+
+            margin-bottom: 5px;
+
+            line-height: 1.5;
+
+        }
+
+        .comment-item .heart { color: #d0a0b8; }
+
+        .comment-item .cdate { color: #c8b0be; margin-left: 6px; font-size: 11px; }
+
+        .empty-tip {
+
+            text-align: center;
+
+            color: #d0a8be;
+
+            font-size: 13px;
+
+            padding: 12px 0 4px;
+
+        }
+
+        .photo-upload-hint {
+
+            text-align: center;
+
+            margin: 20px 0 4px;
+
+            font-size: 11px;
+
+            color: #d4b8c8;
+
+            letter-spacing: 1px;
+
+        }
+
+        .anniv-header {
+
+            text-align: center;
+
+            padding: 36px 20px 4px;
+
+        }
+
+        .anniv-date {
+
+            font-size: 12px;
+
+            color: #c09aaa;
+
+            letter-spacing: 0.5px;
+
+            margin-bottom: 6px;
+
+        }
+
+        .anniv-time {
+
+            font-size: 42px;
+
+            font-weight: 200;
+
+            letter-spacing: 3px;
+
+            color: #b85070;
+
+            line-height: 1.1;
+
+        }
+
+        .countdown-card { text-align: center; margin: 12px 14px; }
+
+        .countdown-flex {
+
+            display: flex;
+
+            justify-content: space-around;
+
+            align-items: center;
+
+        }
+
+        .countdown-item .number {
+
+            font-size: 38px;
+
+            font-weight: 200;
+
+            color: #d0607a;
+
+            line-height: 1;
+
+        }
+
+        .countdown-item .label {
+
+            font-size: 11px;
+
+            color: #b09098;
+
+            margin-top: 4px;
+
+        }
+
+        .divider-line {
+
+            width: 1px;
+
+            height: 44px;
+
+            background: rgba(220,150,180,0.25);
+
+        }
+
+        .anniv-sub {
+
+            margin-top: 14px;
+
+            font-size: 12px;
+
+            color: #d4a0b8;
+
+            letter-spacing: 2px;
+
+        }
+
+        .diary-who-btn-group {
+
+            display: flex;
+
+            gap: 8px;
+
+            margin: 10px 14px 0 14px;
+
+        }
+
+        .diary-who-btn-group .btn {
+
+            flex: 1;
+
+            padding: 12px 0;
+
+            font-size: 15px;
+
+            border-radius: 16px;
+
+        }
+
+        .inline-input-btn {
+
+            display: flex;
+
+            gap: 8px;
+
+        }
+
+        .inline-input-btn .input { flex: 1; }
+
+        .comment-input-row {
+
+            display: flex;
+
+            gap: 8px;
+
+            margin-top: 12px;
+
+        }
+
+        .comment-input-row .input { flex: 1; font-size: 12px; }
+
+        .comment-input-row .btn { padding: 9px 14px; font-size: 12px; }
+
+        .memo-list { margin-top: 4px; }
+
+        .pt-24 { padding-top: 24px; }
+
+        .diary-list { margin-top: 4px; }
+
+        input, textarea {
+
+            touch-action: manipulation;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div id="root"></div>
+
+<script>
+
+    (function() {
+
+        // ---------- 常量 ----------
+
+        const ANNIV = new Date("2026-05-16T00:00:00");
+
+        const TARGET_100 = new Date(ANNIV.getTime() + 100 * 86400000);
+
+        function pad(n) { return String(n).padStart(2, "0"); }
+
+        // ---------- 存储 ----------
+
+        const storage = {
+
+            get: (key) => {
+
+                try {
+
+                    const val = localStorage.getItem(key);
+
+                    return val ? { value: val } : null;
+
+                } catch (_) { return null; }
+
+            },
+
+            set: (key, value) => {
+
+                try {
+
+                    localStorage.setItem(key, value);
+
+                    return Promise.resolve();
+
+                } catch (_) { return Promise.resolve(); }
+
+            }
+
+        };
+
+        window.storage = storage;
+
+        // ---------- 状态 ----------
+
+        let state = {
+
+            tab: 'home',
+
+            now: new Date(),
+
+            photos: [null, null],
+
+            memos: [],
+
+            memoInput: '',
+
+            diaries: { lc: [], bb: [] },
+
+            diaryInput: '',
+
+            diaryWho: 'lc',
+
+            comments: {},
+
+            loaded: false
+
+        };
+
+        // 防止键盘收起：记录当前是否有输入框聚焦
+
+        let isInputFocused = false;
+
+        // ---------- SVG 图标 ----------
+
+        const SVG_ICONS = {
+
+            home: `<svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18V42H39V18L24 6L9 18Z" fill="none" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 29V42H29V29H19Z" fill="none" stroke="#333" stroke-width="4" stroke-linejoin="round"/><path d="M9 42H39" stroke="#333" stroke-width="4" stroke-linecap="round"/></svg>`,
+
+            memo: `<svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 7H16C20.4183 7 24 10.5817 24 15V42C24 38.6863 21.3137 36 18 36H5V7Z" fill="none" stroke="#333" stroke-width="4" stroke-linejoin="round"/><path d="M43 7H32C27.5817 7 24 10.5817 24 15V42C24 38.6863 26.6863 36 30 36H43V7Z" fill="none" stroke="#333" stroke-width="4" stroke-linejoin="round"/></svg>`,
+
+            diary: `<svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 6C8 4.89543 8.89543 4 10 4H38C39.1046 4 40 4.89543 40 6V42C40 43.1046 39.1046 44 38 44H10C8.89543 44 8 43.1046 8 42V6Z" fill="none" stroke="#333" stroke-width="4" stroke-linejoin="round"/><path d="M16 4V44" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 12H32" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 20H32" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 4H22" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 44H22" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+
+        };
+
+        // ---------- 渲染 ----------
+
+        function render() {
+
+            const root = document.getElementById('root');
+
+            if (!root) return;
+
+            // 如果输入框聚焦，只更新时间，不重新渲染整个页面
+
+            if (isInputFocused) {
+
+                updateClockOnly();
+
+                return;
+
+            }
+
+            const { tab, now, photos, memos, memoInput, diaries, diaryInput, diaryWho, comments, loaded } = state;
+
+            const days = Math.floor((now - ANNIV) / 86400000);
+
+            const to100 = Math.max(0, Math.ceil((TARGET_100 - now) / 86400000));
+
+            const dateStr = `${now.getFullYear()}.${pad(now.getMonth() + 1)}.${pad(now.getDate())}`;
+
+            const weekday = ["日", "一", "二", "三", "四", "五", "六"][now.getDay()];
+
+            const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+
+            let html = `<div class="app-root">`;
+
+            // ---- HOME ----
+
+            if (tab === 'home') {
+
+                html += `
+
+                    <div class="anniv-header">
+
+                        <div class="anniv-date" id="clockDate">${dateStr} 星期${weekday}</div>
+
+                        <div class="anniv-time" id="clockTime">${timeStr}</div>
+
+                    </div>
+
+                    <div class="card countdown-card">
+
+                        <div class="countdown-flex">
+
+                            <div class="countdown-item">
+
+                                <div class="number">${days}</div>
+
+                                <div class="label">在一起已经</div>
+
+                            </div>
+
+                            <div class="divider-line"></div>
+
+                            <div class="countdown-item">
+
+                                <div class="number">${to100}</div>
+
+                                <div class="label">距 100 天还有</div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="anniv-sub">♡ &nbsp; 2026.05.16</div>
+
+                    </div>
+
+                    <div class="photo-grid">
+
+                        ${[0,1].map(i => `
+
+                            <div class="photo-box" data-photo-index="${i}">
+
+                                ${photos[i] ? `<img src="${photos[i]}" alt="" />` : `<span>+</span>`}
+
+                                <input type="file" accept="image/*" style="display:none" data-file-index="${i}" />
+
+                            </div>
+
+                        `).join('')}
+
+                    </div>
+
+                    <div class="photo-upload-hint"></div>
+
+                `;
+
+            }
+
+            // ---- MEMO ----
+
+            if (tab === 'memo') {
+
+                html += `<div class="pt-24">`;
+
+                html += `
+
+                    <div class="card">
+
+                        <div class="section-title">备忘录</div>
+
+                        <div class="inline-input-btn">
+
+                            <input class="input" id="memoInput" value="${escapeHtml(memoInput)}" placeholder="添加备忘事项..." autocomplete="off" />
+
+                            <button class="btn" id="addMemoBtn">＋</button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+                if (memos.length === 0 && loaded) {
+
+                    html += `<div class="empty-tip mt-48">还没有备忘 ♡</div>`;
+
+                }
+
+                html += `<div class="memo-list">`;
+
+                memos.forEach(m => {
+
+                    html += `
+
+                        <div class="card flex-between memo-item" data-memo-id="${m.id}">
+
+                            <div>
+
+                                <div class="memo-text">${escapeHtml(m.text)}</div>
+
+                                <div class="memo-date">${escapeHtml(m.date)}</div>
+
+                            </div>
+
+                            <button class="del-btn" data-del-memo="${m.id}">×</button>
+
+                        </div>
+
+                    `;
+
+                });
+
+                html += `</div></div>`;
+
+            }
+
+            // ---- DIARY ----
+
+            if (tab === 'diary') {
+
+                html += `<div class="pt-24">`;
+
+                html += `
+
+                    <div class="diary-who-btn-group">
+
+                        <button class="btn ${diaryWho === 'lc' ? '' : 'btn-inactive'}" data-diary-who="lc">Sylvan</button>
+
+                        <button class="btn ${diaryWho === 'bb' ? '' : 'btn-inactive'}" data-diary-who="bb">钟家欣</button>
+
+                    </div>
+
+                `;
+
+                const currentEntries = diaries[diaryWho] || [];
+
+                const nameLabel = diaryWho === 'lc' ? 'Sylvan' : '钟家欣';
+
+                html += `
+
+                    <div class="card" style="margin-top: 10px;">
+
+                        <div class="section-title">写日记 · ${nameLabel}</div>
+
+                        <textarea class="textarea" id="diaryInput" placeholder="写点什么..." style="min-height:80px;" autocomplete="off">${escapeHtml(diaryInput)}</textarea>
+
+                        <button class="btn w-full mt-10" id="saveDiaryBtn">保存</button>
+
+                    </div>
+
+                `;
+
+                if (currentEntries.length === 0 && loaded) {
+
+                    html += `<div class="empty-tip">${nameLabel} 还没有日记 ♡</div>`;
+
+                }
+
+                html += `<div class="diary-list">`;
+
+                const reversed = [...currentEntries].reverse();
+
+                reversed.forEach(entry => {
+
+                    const entryId = entry.id;
+
+                    const comms = entry.comments || [];
+
+                    html += `
+
+                        <div class="card" data-entry-id="${entryId}" data-who="${diaryWho}">
+
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                                <div class="date" style="margin-bottom:0;">${escapeHtml(entry.date)}</div>
+                                <button class="del-btn" data-del-diary="${entryId}" data-del-who="${diaryWho}">×</button>
+                            </div>
+
+                            <div class="content">${escapeHtml(entry.content)}</div>
+
+                    `;
+
+                    if (comms.length > 0) {
+
+                        html += `<div class="comment-area">`;
+
+                        comms.forEach(c => {
+
+                            html += `
+
+                                <div class="comment-item">
+
+                                    <span class="heart">♡</span> <span style="font-size:11px;color:#c05878;font-weight:600;margin-right:4px;">${escapeHtml(c.from || (diaryWho==='lc'?'钟家欣':'Sylvan'))}</span>${escapeHtml(c.text)}
+
+                                    <span class="cdate">${escapeHtml(c.date)}</span>
+
+                                </div>
+
+                            `;
+
+                        });
+
+                        html += `</div>`;
+
+                    }
+
+                    const commentValue = comments[entryId] || '';
+
+                    html += `
+
+                        <div class="comment-input-row" data-entry="${entryId}" data-who="${diaryWho}">
+
+                            <input class="input" value="${escapeHtml(commentValue)}" placeholder="留个评论..." data-comment-input="${entryId}" autocomplete="off" />
+
+                            <button class="btn" style="padding:9px 14px;font-size:12px;" data-comment-submit="${entryId}">回</button>
+
+                        </div>
+
+                    `;
+
+                    html += `</div>`;
+
+                });
+
+                html += `</div>`;
+
+                html += `</div>`;
+
+            }
+
+            // ---- TAB BAR ----
+
+            html += `
+
+                <div class="tab-bar">
+
+                    <button class="tab-btn ${tab === 'home' ? 'active' : ''}" data-tab="home">
+
+                        ${SVG_ICONS.home}
+
+                        <span>首页</span>
+
+                    </button>
+
+                    <button class="tab-btn ${tab === 'memo' ? 'active' : ''}" data-tab="memo">
+
+                        ${SVG_ICONS.memo}
+
+                        <span>备忘录</span>
+
+                    </button>
+
+                    <button class="tab-btn ${tab === 'diary' ? 'active' : ''}" data-tab="diary">
+
+                        ${SVG_ICONS.diary}
+
+                        <span>日记</span>
+
+                    </button>
+
+                </div>
+
+            `;
+
+            html += `</div>`;
+
+            root.innerHTML = html;
+
+            bindEvents();
+
+        }
+
+        // 只更新时钟显示（首页用）
+
+        function updateClockOnly() {
+
+            const now = state.now;
+
+            const dateStr = `${now.getFullYear()}.${pad(now.getMonth() + 1)}.${pad(now.getDate())}`;
+
+            const weekday = ["日", "一", "二", "三", "四", "五", "六"][now.getDay()];
+
+            const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+
+            
+
+            const dateEl = document.getElementById('clockDate');
+
+            const timeEl = document.getElementById('clockTime');
+
+            if (dateEl) dateEl.textContent = `${dateStr} 星期${weekday}`;
+
+            if (timeEl) timeEl.textContent = timeStr;
+
+        }
+
+        // ---------- 事件绑定 ----------
+
+        function bindEvents() {
+
+            const root = document.getElementById('root');
+
+            if (!root) return;
+
+            // Tab 切换
+
+            root.querySelectorAll('.tab-btn').forEach(btn => {
+
+                btn.onclick = function() {
+
+                    const t = this.dataset.tab;
+
+                    if (t) {
+
+                        state.tab = t;
+
+                        render();
+
+                    }
+
+                };
+
+            });
+
+            // 日记人物切换
+
+            root.querySelectorAll('[data-diary-who]').forEach(btn => {
+
+                btn.onclick = function() {
+
+                    const who = this.dataset.diaryWho;
+
+                    if (who === 'lc' || who === 'bb') {
+
+                        state.diaryWho = who;
+
+                        state.diaryInput = '';
+
+                        render();
+
+                    }
+
+                };
+
+            });
+
+            // 照片上传
+
+            root.querySelectorAll('.photo-box').forEach(box => {
+
+                const idx = box.dataset.photoIndex;
+
+                const fileInput = box.querySelector('input[type="file"]');
+
+                if (fileInput) {
+
+                    fileInput.onchange = function(e) {
+
+                        const f = e.target.files[0];
+
+                        if (!f) return;
+
+                        const rd = new FileReader();
+
+                        rd.onload = function(ev) {
+
+                            const p = [...state.photos];
+
+                            p[idx] = ev.target.result;
+
+                            state.photos = p;
+
+                            storage.set('photos', JSON.stringify(p));
+
+                            render();
+
+                        };
+
+                        rd.readAsDataURL(f);
+
+                    };
+
+                    box.onclick = function(e) {
+
+                        if (e.target.tagName !== 'INPUT') {
+
+                            const inp = this.querySelector('input[type="file"]');
+
+                            if (inp) inp.click();
+
+                        }
+
+                    };
+
+                }
+
+            });
+
+            // 备忘录
+
+            const memoInput = document.getElementById('memoInput');
+
+            const addMemoBtn = document.getElementById('addMemoBtn');
+
+            if (memoInput && addMemoBtn) {
+
+                // 聚焦/失焦标记
+
+                memoInput.onfocus = function() { isInputFocused = true; };
+
+                memoInput.onblur = function() { isInputFocused = false; };
+
+                memoInput.oninput = function() { state.memoInput = this.value; };
+
+                memoInput.onkeydown = function(e) {
+
+                    if (e.key === 'Enter') {
+
+                        e.preventDefault();
+
+                        addMemo();
+
+                    }
+
+                };
+
+                addMemoBtn.onclick = addMemo;
+
+                function addMemo() {
+
+                    const text = memoInput.value.trim();
+
+                    if (!text) return;
+
+                    const dateStr = getDateStr();
+
+                    const next = [...state.memos, { id: Date.now(), text, date: dateStr }];
+
+                    state.memos = next;
+
+                    state.memoInput = '';
+
+                    storage.set('memos', JSON.stringify(next));
+
+                    render();
+
+                }
+
+            }
+
+            // 删除备忘录
+
+            root.querySelectorAll('[data-del-memo]').forEach(btn => {
+
+                btn.onclick = function() {
+
+                    const id = Number(this.dataset.delMemo);
+
+                    const next = state.memos.filter(m => m.id !== id);
+
+                    state.memos = next;
+
+                    storage.set('memos', JSON.stringify(next));
+
+                    render();
+
+                };
+
+            });
+
+            // 删除日记
+
+            root.querySelectorAll('[data-del-diary]').forEach(btn => {
+
+                btn.onclick = function() {
+
+                    const id = Number(this.dataset.delDiary);
+
+                    const who = this.dataset.delWho;
+
+                    const next = { ...state.diaries, [who]: state.diaries[who].filter(e => e.id !== id) };
+
+                    state.diaries = next;
+
+                    storage.set('diaries', JSON.stringify(next));
+
+                    render();
+
+                };
+
+            });
+
+            // 日记保存
+
+            const diaryInput = document.getElementById('diaryInput');
+
+            const saveDiaryBtn = document.getElementById('saveDiaryBtn');
+
+            if (diaryInput && saveDiaryBtn) {
+
+                diaryInput.onfocus = function() { isInputFocused = true; };
+
+                diaryInput.onblur = function() { isInputFocused = false; };
+
+                diaryInput.oninput = function() { state.diaryInput = this.value; };
+
+                diaryInput.onkeydown = function(e) {
+
+                    if (e.key === 'Enter' && e.ctrlKey) {
+
+                        e.preventDefault();
+
+                        saveDiary();
+
+                    }
+
+                };
+
+                saveDiaryBtn.onclick = saveDiary;
+
+                function saveDiary() {
+
+                    const content = diaryInput.value.trim();
+
+                    if (!content) return;
+
+                    const dateStr = getDateStr();
+
+                    const entry = { id: Date.now(), content, date: dateStr, comments: [] };
+
+                    const who = state.diaryWho;
+
+                    const next = { ...state.diaries, [who]: [...state.diaries[who], entry] };
+
+                    state.diaries = next;
+
+                    state.diaryInput = '';
+
+                    storage.set('diaries', JSON.stringify(next));
+
+                    render();
+
+                }
+
+            }
+
+            // 评论
+
+            root.querySelectorAll('[data-comment-submit]').forEach(btn => {
+
+                btn.onclick = function() {
+
+                    const entryId = Number(this.dataset.commentSubmit);
+
+                    const container = this.closest('.card');
+
+                    if (!container) return;
+
+                    const who = container.dataset.who;
+
+                    const input = container.querySelector('input[data-comment-input]');
+
+                    if (!input) return;
+
+                    const text = input.value.trim();
+
+                    if (!text) return;
+
+                    const dateStr = getDateStr();
+
+                    const commenterName = who === 'lc' ? '钟家欣' : 'Sylvan';
+
+                    const nextDiaries = { ...state.diaries };
+
+                    const entries = nextDiaries[who] || [];
+
+                    const idx = entries.findIndex(e => e.id === entryId);
+
+                    if (idx === -1) return;
+
+                    const entry = entries[idx];
+
+                    const newComments = [...(entry.comments || []), { text, date: dateStr, from: commenterName }];
+
+                    entries[idx] = { ...entry, comments: newComments };
+
+                    nextDiaries[who] = entries;
+
+                    state.diaries = nextDiaries;
+
+                    const newCommentsState = { ...state.comments };
+
+                    delete newCommentsState[entryId];
+
+                    state.comments = newCommentsState;
+
+                    storage.set('diaries', JSON.stringify(nextDiaries));
+
+                    render();
+
+                };
+
+            });
+
+            root.querySelectorAll('input[data-comment-input]').forEach(inp => {
+
+                inp.onfocus = function() { isInputFocused = true; };
+
+                inp.onblur = function() { isInputFocused = false; };
+
+                inp.oninput = function() {
+
+                    const id = Number(this.dataset.commentInput);
+
+                    state.comments = { ...state.comments, [id]: this.value };
+
+                };
+
+                inp.onkeydown = function(e) {
+
+                    if (e.key === 'Enter') {
+
+                        e.preventDefault();
+
+                        const submitBtn = this.closest('.comment-input-row').querySelector('[data-comment-submit]');
+
+                        if (submitBtn) submitBtn.click();
+
+                    }
+
+                };
+
+            });
+
+        }
+
+        function getDateStr() {
+
+            const now = state.now;
+
+            return `${now.getFullYear()}.${pad(now.getMonth() + 1)}.${pad(now.getDate())}`;
+
+        }
+
+        function escapeHtml(str) {
+
+            if (!str) return '';
+
+            return String(str).replace(/[&<>"]/g, function(m) {
+
+                if (m === '&') return '&amp;';
+
+                if (m === '<') return '&lt;';
+
+                if (m === '>') return '&gt;';
+
+                if (m === '"') return '&quot;';
+
+                return m;
+
+            });
+
+        }
+
+        // ---------- 初始化 ----------
+
+        async function loadAllAndRender() {
+
+            try {
+
+                const memoRaw = await storage.get('memos');
+
+                if (memoRaw) state.memos = JSON.parse(memoRaw.value) || [];
+
+                const diaryRaw = await storage.get('diaries');
+
+                if (diaryRaw) state.diaries = JSON.parse(diaryRaw.value) || { lc: [], bb: [] };
+
+                const photoRaw = await storage.get('photos');
+
+                if (photoRaw) state.photos = JSON.parse(photoRaw.value) || [null, null];
+
+            } catch (_) {}
+
+            state.loaded = true;
+
+            render();
+
+        }
+
+        function startClock() {
+
+            setInterval(() => {
+
+                state.now = new Date();
+
+                // 如果有输入框聚焦，只更新时钟；否则完整渲染
+
+                if (isInputFocused) {
+
+                    updateClockOnly();
+
+                } else {
+
+                    render();
+
+                }
+
+            }, 1000);
+
+        }
+
+        loadAllAndRender();
+
+        startClock();
+
+        window.__state = state;
+
+    })();
+
+</script>
+
+</body>
+
+</html>
